@@ -19,7 +19,7 @@ def createWordList(length):
 # depending on the specific game, words can have various lengths
 length = int(input('Word length: '))
 # a list of all words is initially created
-posibilities = createWordList(length)
+possibilities = createWordList(length)
 
 letter = []  # the array of known letters
 for i in range(length):
@@ -39,8 +39,8 @@ while True:  # this will work for any number of rounds
     contained += input("Contained: ") 
     notContained += input("Not contained: ")
 
-    posibilitiesAUX = []
-    for word in posibilities:  # checks every word from the current possibilities
+    possibilitiesAUX = []
+    for word in possibilities:  # checks every word from the current possibilities
         ok = 1  # the word is supposedly valid
         for i in range(length):    # checks for every letter
             if letter[i]:     # if that position has a known letter
@@ -53,11 +53,12 @@ while True:  # this will work for any number of rounds
             if character in word:
                 ok = 0  # if one letter is present, the word is not valid
         if ok:  # if yes, it is added for the next round of checking
-            posibilitiesAUX.append(word)
+            possibilitiesAUX.append(word)
 
-    posibilities = posibilitiesAUX  # the list of possible words is updated
-    #print(posibilities)  # shows the remaining words
+    possibilities = possibilitiesAUX  # the list of possible words is updated
     print('------------------------------------') 
+    print('Possible words:')
+    print(possibilities)  # shows the remaining words
     print('Letters: ', end='') # prints the known word format
     for i in range(length): 
         if letter[i]: 
