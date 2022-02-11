@@ -9,10 +9,11 @@ def createWordList(length):
     if length == 5:  # The official Wordle game has some words that are not on the main list
         # the Wordle word list is taken from the source code of the game, which is publicly available
         with open('WordleWords.txt') as wordsFile:
-            wordleWords = set(wordsFile.read().split()) # makes another set 
-            validWords.update(wordleWords) # we update the main set
+            wordleWords = set(wordsFile.read().split())  # makes another set
+            validWords.update(wordleWords)  # we update the main set
 
-    return sorted(validWords) # the final set is returned, ordered alphabetically
+    # the final set is returned, ordered alphabetically
+    return sorted(validWords)
 
 
 # depending on the specific game, words can have various lengths
@@ -20,14 +21,23 @@ length = int(input('Word length: '))
 # a list of all words is initially created
 posibilities = createWordList(length)
 
+letter = []  # the array of known letters
+for i in range(length):
+    letter.append('')
+
+contained = '' # letters known to be in the word, but not the position
+notContained = '' # letters known to not be in the word
+
 
 while True:  # this will work for any number of rounds
-    letter = []  # the array of known letters
-    for i in range(length):
-        print('Letter {}: '.format(i+1), end='')
-        letter.append(input())
-    contained = input("Contained: ")  # the letters known,
-    notContained = input("Not contained: ")
+    
+    for i in range(length): # checks for new letters
+        if letter[i] == '': # if a letter is known, its position is ignored
+            print('Letter {}: '.format(i+1), end='')
+            letter[i] = input()
+
+    contained += input("Contained: ") 
+    notContained += input("Not contained: ")
 
     posibilitiesAUX = []
     for word in posibilities:  # checks every word from the current possibilities
@@ -45,5 +55,21 @@ while True:  # this will work for any number of rounds
         if ok:  # if yes, it is added for the next round of checking
             posibilitiesAUX.append(word)
 
-    posibilities = posibilitiesAUX # the list of possible words is updated
-    print(posibilities) # shows the remaining words
+    posibilities = posibilitiesAUX  # the list of possible words is updated
+    #print(posibilities)  # shows the remaining words
+    print('------------------------------------') 
+    print('Letters: ', end='') # prints the known word format
+    for i in range(length): 
+        if letter[i]: 
+            print(letter[i], end='')
+        else: # the unknown letters are substituted by an underscore
+            print('_', end='')
+    print()   
+    print('Contained:', contained)
+    print('Not contained:', notContained)
+    print('------------------------------------')
+
+# TO DO
+#
+#   - add known invalid positions for contained letters
+#
