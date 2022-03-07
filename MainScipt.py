@@ -21,6 +21,7 @@ length = int(input('Word length: '))
 # a list of all words is initially created
 possibilities = createWordList(length)
 
+
 letter = []  # the array of known letters
 for i in range(length):
     letter.append('')
@@ -71,6 +72,8 @@ while True:  # this will work for any number of rounds
     print('------------------------------------')
 
 # TO DO
-#
+#   - remove letter from contained if found position
+#   - optimize letter indexing so that known letters are not checked anymore
 #   - add known invalid positions for contained letters
-#
+#   
+#   
