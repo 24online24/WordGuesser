@@ -16,10 +16,20 @@ def create_word_list(length):
     return sorted(validWords)
 
 
-def add_input_to_set(main_set, message=''):
+def positional_check(set_to_check, positions_list):
+    for element in set_to_check:
+        position = int(input(f"What position did you check {element} on? "))
+        positions_list[position-1].append(element)
+
+
+def add_input_to_set(main_set, message='', check_position=False, positions_list=None):
     string = input(message)
+    aux_set = set()
     for character in string:
-        main_set.add(character)
+        aux_set.add(character)
+    if(check_position):
+        positional_check(aux_set, positions_list)
+    main_set.update(aux_set)
 
 
 # depending on the specific game, words can have various lengths
@@ -27,49 +37,56 @@ length = int(input('Word length: '))
 # a list of all words is initially created
 possibilities = create_word_list(length)
 
-letter = []  # the array of known letters
+letter = list()  # the array of known letters
 for i in range(length):
     letter.append('')
 
 contained = set()  # letters known to be in the word, but not the position
 not_contained = set()  # letters known to not be in the word
+# letters tried for every position, as lists in a tuple
+tried = tuple(([] for i in range(length)))
 
 while True:  # this will work for any number of rounds
 
     for i in range(length):  # checks for new letters
         if letter[i] == '':  # if a letter is known, its position is ignored for later checks
-            print('Letter {}: '.format(i+1), end='')
+            print('Letter {}: '.format(i+True), end='')
             letter[i] = input()
             if letter[i] in contained:
                 contained.remove(letter[i])
 
-    add_input_to_set(contained, "Contained: ")
+    add_input_to_set(contained, "Contained: ", True, tried)
     add_input_to_set(not_contained, "Not contained: ")
 
-    possibilitiesAUX = []
+    possibilitiesAUX = list()
     for word in possibilities:  # checks every word from the current possibilities
-        ok_known = 1  # the word supposedly matches all known letters
+
+        ok_known = True  # the word supposedly matches all known letters
         for i in range(length):  # checks for every letter
             if letter[i]:  # if that position has a known letter
                 if word[i] != letter[i]:  # checks if the word matches
-                    ok_known = 0  # if one letter doesn't match, the word is not valid
+                    ok_known = False  # if one letter doesn't match, the word is not valid
 
-        count_contained = 0
+        ok_contained = True  # checks if all contained letters appear in word
         for character in contained:  # every letter that is contained must be checked
+            ok_contained = False  # supposes a letter does not appear
             for i in range(length):  # checks for every letter position
                 if letter[i] == '':  # ignores positions with known letters in them
-                    if character == word[i]:
-                        count_contained += 1
-                        break
-        ok_contained = (count_contained == len(contained))
+                    if character == word[i]:  # if the letter appears
+                        if character not in tried[i]: # and if it has not been tried in this position already
+                            ok_contained = True  # the boolean variable is switched
+                        break  # it doesn't check for said letter anymore
+            if ok_contained == False:  # it a letter didn't appear
+                break  # it doesn't check for other letters
 
-        ok_not_contained = 1
+        # supposes the word is valid and doesn't containe any character it shouldn't
+        ok_not_contained = True
         for character in not_contained:  # ever letter that we know is not contained must not be present
             for i in range(length):  # checks for every letter position
                 if letter[i] == '':  # ignores positions with known letters in them
-                    if character == word[i]:
-                        ok_not_contained = 0  # if one letter is present, the word is not valid
-            
+                    if character == word[i]:  # if one letter is present,
+                        ok_not_contained = False  # the word is not valid
+
         if ok_known and ok_contained and ok_not_contained:  # if yes, it is added for the next round of checking
             possibilitiesAUX.append(word)
 
@@ -85,12 +102,12 @@ while True:  # this will work for any number of rounds
             print('_', end='')
     print()
     print('Contained:', ', '.join(character for character in contained))
+    print(f'Tried: {tried}')
     print('Not contained:', ', '.join(character for character in not_contained))
     print('------------------------------------')
 
 # TO DO
-#   - add known invalid positions for contained letters
-# Done
 #   - remove letter from contained if found position
 #   - optimize letter indexing so that known letters are not checked anymore
 #   - contianed and not_contained made into sets from strings
+#   - add known tried positions for contained letters
