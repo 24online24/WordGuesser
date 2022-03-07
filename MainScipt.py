@@ -82,10 +82,11 @@ while True:  # this will work for any number of rounds
         # supposes the word is valid and doesn't containe any character it shouldn't
         ok_not_contained = True
         for character in not_contained:  # ever letter that we know is not contained must not be present
-            for i in range(length):  # checks for every letter position
-                if letter[i] == '':  # ignores positions with known letters in them
-                    if character == word[i]:  # if one letter is present,
-                        ok_not_contained = False  # the word is not valid
+            if character not in contained:
+                for i in range(length):  # checks for every letter position
+                    if letter[i] == '':  # ignores positions with known letters in them
+                        if character == word[i]:  # if one letter is present,
+                            ok_not_contained = False  # the word is not valid
 
         if ok_known and ok_contained and ok_not_contained:  # if yes, it is added for the next round of checking
             possibilitiesAUX.append(word)
