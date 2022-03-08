@@ -112,7 +112,7 @@ while True:  # this will work for any number of rounds
     print('------------------------------------')
 
 # TO DO
-#   - Display tried tuple nicer 
+#   
 #   
 # Done
 #   - remove letter from contained if found position
@@ -122,3 +122,4 @@ while True:  # this will work for any number of rounds
 #   - positional check prompts for every contained letter,
 #   not just the ones added on the last step
 #   - show colors in messages
+#   - Display tried tuple nicer 
