@@ -22,13 +22,11 @@ def positional_check(set_to_check, positions_list):
         positions_list[position-1].append(element)
 
 
-def add_input_to_set(main_set, message='', check_position=False, positions_list=None):
+def add_input_to_set(main_set, message=''):
     string = input(message)
     aux_set = set()
     for character in string:
         aux_set.add(character)
-    if(check_position):
-        positional_check(aux_set, positions_list)
     main_set.update(aux_set)
 
 
@@ -55,7 +53,8 @@ while True:  # this will work for any number of rounds
             if letter[i] in contained:
                 contained.remove(letter[i])
 
-    add_input_to_set(contained, "Contained (shown in yellow): ", True, tried)
+    add_input_to_set(contained, "Contained (shown in yellow): ")
+    positional_check(contained, tried)
     add_input_to_set(not_contained, "Not contained (shown in black): ")
 
     possibilitiesAUX = list()
@@ -73,7 +72,8 @@ while True:  # this will work for any number of rounds
             for i in range(length):  # checks for every letter position
                 if letter[i] == '':  # ignores positions with known letters in them
                     if character == word[i]:  # if the letter appears
-                        if character not in tried[i]: # and if it has not been tried in this position already
+                        # and if it has not been tried in this position already
+                        if character not in tried[i]:
                             ok_contained = True  # the boolean variable is switched
                         break  # it doesn't check for said letter anymore
             if ok_contained == False:  # it a letter didn't appear
@@ -108,7 +108,13 @@ while True:  # this will work for any number of rounds
     print('------------------------------------')
 
 # TO DO
+#   - Display tried tuple nicer 
+#   
+# Done
 #   - remove letter from contained if found position
 #   - optimize letter indexing so that known letters are not checked anymore
 #   - contianed and not_contained made into sets from strings
 #   - add known tried positions for contained letters
+#   - positional check prompts for every contained letter,
+#   not just the ones added on the last step
+#   - show colors in messages
