@@ -103,7 +103,11 @@ while True:  # this will work for any number of rounds
             print('_', end='')
     print()
     print('Contained:', ', '.join(character for character in contained))
-    print(f'Tried: {tried}')
+    print('Tried: ')
+    for i in range(length):
+        print(f' {i+1}: ', end='')
+        print(tried[i])
+
     print('Not contained:', ', '.join(character for character in not_contained))
     print('------------------------------------')
 
