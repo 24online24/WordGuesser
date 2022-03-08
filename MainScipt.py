@@ -47,7 +47,7 @@ not_contained = set()  # letters known to not be in the word
 tried = tuple(([] for i in range(length)))
 
 while True:  # this will work for any number of rounds
-
+    print('Known letters (shown in green)')
     for i in range(length):  # checks for new letters
         if letter[i] == '':  # if a letter is known, its position is ignored for later checks
             print('Letter {}: '.format(i+True), end='')
@@ -55,8 +55,8 @@ while True:  # this will work for any number of rounds
             if letter[i] in contained:
                 contained.remove(letter[i])
 
-    add_input_to_set(contained, "Contained: ", True, tried)
-    add_input_to_set(not_contained, "Not contained: ")
+    add_input_to_set(contained, "Contained (shown in yellow): ", True, tried)
+    add_input_to_set(not_contained, "Not contained (shown in black): ")
 
     possibilitiesAUX = list()
     for word in possibilities:  # checks every word from the current possibilities
