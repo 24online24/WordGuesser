@@ -1,0 +1,14 @@
+TO DO
+  - match both upper and lower case
+  - option to restart game
+  - check input validity
+  
+Done
+  - remove letter from contained if found position
+  - optimize letter indexing so that known letters are not checked anymore
+  - contianed and not_contained made into sets from strings
+  - add known tried positions for contained letters
+  - positional check prompts for every contained letter,
+  not just the ones added on the last step
+  - show colors in messages
+  - Display tried tuple nicer 

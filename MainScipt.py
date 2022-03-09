@@ -16,14 +16,36 @@ def create_word_list(length):
     return sorted(validWords)
 
 
+def get_input(message, type):
+    strings = ['single_char', 'multiple_char']
+
+    while True:
+        print(message, end='')
+        raw = input()
+
+        if raw == '' and type in strings:
+            return raw
+
+        elif type in strings and raw.isalpha():
+            if type == 'single_char':
+                if len(raw) < 2:
+                    return raw
+            else:
+                return raw
+
+        elif type == int and raw.isnumeric():
+            return int(raw)
+        print('Invalid input')
+
+
 def positional_check(set_to_check, positions_list):
     for element in set_to_check:
-        position = int(input(f"What position did you check {element} on? "))
+        position = get_input(f"What position did you check {element} on? ", int)
         positions_list[position-1].append(element)
 
 
 def add_input_to_set(main_set, message=''):
-    string = input(message)
+    string = get_input(message, 'multiple_char')
     aux_set = set()
     for character in string:
         aux_set.add(character)
@@ -31,7 +53,7 @@ def add_input_to_set(main_set, message=''):
 
 
 # depending on the specific game, words can have various lengths
-length = int(input('Word length: '))
+length = get_input('Word length: ', int)
 # a list of all words is initially created
 possibilities = create_word_list(length)
 
@@ -48,8 +70,7 @@ while True:  # this will work for any number of rounds
     print('Known letters (shown in green)')
     for i in range(length):  # checks for new letters
         if letter[i] == '':  # if a letter is known, its position is ignored for later checks
-            print('Letter {}: '.format(i+True), end='')
-            letter[i] = input()
+            letter[i] = get_input(f'Letter {i+1}: ', 'single_char')
             if letter[i] in contained:
                 contained.remove(letter[i])
 
@@ -110,16 +131,3 @@ while True:  # this will work for any number of rounds
 
     print('Not contained:', ', '.join(character for character in not_contained))
     print('------------------------------------')
-
-# TO DO
-#   
-#   
-# Done
-#   - remove letter from contained if found position
-#   - optimize letter indexing so that known letters are not checked anymore
-#   - contianed and not_contained made into sets from strings
-#   - add known tried positions for contained letters
-#   - positional check prompts for every contained letter,
-#   not just the ones added on the last step
-#   - show colors in messages
-#   - Display tried tuple nicer 
