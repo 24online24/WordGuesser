@@ -1,5 +1,4 @@
 TO DO
-  - option to restart game
   
 Done
   - remove letter from contained if found position
@@ -12,3 +11,4 @@ Done
   - display tried tuple nicer 
   - check input validity
   - match both upper and lower case
+  - option to restart game
