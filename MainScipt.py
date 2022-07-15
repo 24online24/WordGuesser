@@ -19,34 +19,42 @@ def create_word_list(length):
     return sorted(validWords)
 
 
-def get_input(message, type):
+def get_int(message, maximum):
     while True:
         print(message, end='')
         raw = input()
-        if type == 0 and raw.isnumeric():
-            return int(raw)
-        if type in [1, 2]:
-            if raw == '':
+        if raw.isnumeric():
+            raw = int(raw)
+            if raw <= maximum or maximum == 0:
                 return raw
-            if raw.isalpha():
-                raw = raw.lower()
-                if type == 1:
-                    if len(raw) < 2:
-                        return raw
-                else:
-                    return raw
         print('Invalid input')
 
 
-def positional_check(set_to_check, positions_list):
+def get_char(message, single):
+    while True:
+        print(message, end='')
+        raw = input()
+        if raw == '':
+            return raw
+        if raw.isalpha():
+            raw = raw.lower()
+            if single == True:
+                if len(raw) < 2:
+                    return raw
+            else:
+                return raw
+        print('Invalid input')
+
+
+def positional_check(set_to_check, positions_list, length):
     for element in set_to_check:
-        position = get_input(
-            f"What position did you check \"{element}\" on? ", 0)
+        position = get_int(
+            f'What position did you check "{element}" on? ', length)
         positions_list[position-1].append(element)
 
 
 def add_input_to_set(main_set, message=''):
-    string = get_input(message, 2)
+    string = get_char(message, False)
     aux_set = set()
     for character in string:
         aux_set.add(character)
@@ -61,15 +69,17 @@ def continue_check():
         if check in ('No', 'N', 'no', 'n', '0'):
             return False
 
+
 def clear_screen():
     if os.name == 'nt':
         _ = os.system('cls')
     else:
         _ = os.system('clear')
 
+
 def guess():
     clear_screen()
-    length = get_input('Word length: ', 0)
+    length = get_int('Word length: ', 0)
     possibilities = create_word_list(length)
     known = list()
     positions_to_check = list()
@@ -84,14 +94,14 @@ def guess():
         print('Known letters (shown in green)')
         for i in range(length):
             if known[i] == '':
-                known[i] = get_input(f'Letter {i+1}: ', 1)
+                known[i] = get_char(f'Letter {i+1}: ', True)
                 if known[i]:
                     positions_to_check.remove(i)
                     if known[i] in contained:
                         contained.remove(known[i])
 
         add_input_to_set(contained, "Contained (shown in yellow): ")
-        positional_check(contained, tried)
+        positional_check(contained, tried, length)
         add_input_to_set(not_contained, "Not contained (shown in black): ")
         clear_screen()
         possibilitiesAUX = list()
