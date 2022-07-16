@@ -139,10 +139,13 @@ def guess():
         clear_screen()
         possibilitiesAUX = list()
         for word in possibilities:
-            if check_known(word, known):
-                if check_not_contained(word, not_contained, contained, positions_to_check):
-                    if check_contained(word, contained, positions_to_check, tried):
-                        possibilitiesAUX.append(word)
+            if not check_known(word, known):
+                continue
+            if not check_not_contained(word, not_contained, contained, positions_to_check):
+                continue
+            if not check_contained(word, contained, positions_to_check, tried):
+                continue
+            possibilitiesAUX.append(word)
         possibilities = possibilitiesAUX  # the list of possible words is updated
         print('------------------------------------')
         print('Possible words:')
