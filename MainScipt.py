@@ -1,5 +1,7 @@
 import os
 
+from numpy import true_divide
+
 
 def create_word_list(length):
     # takes all English words (https://github.com/dwyl/english-words)
@@ -53,7 +55,7 @@ def positional_check(set_to_check, positions_list, length):
         positions_list[position-1].append(element)
 
 
-def add_input_to_set(main_set, message=''):
+def add_input_to_set(main_set: set, message: str=''):
     string = get_char(message, False)
     aux_set = set()
     for character in string:
@@ -75,6 +77,37 @@ def clear_screen():
         _ = os.system('cls')
     else:
         _ = os.system('clear')
+
+
+def check_known(word: str, known: list):
+    """Checks if the word has all the known letters in their positions."""
+    for i, known_letter in enumerate(known):
+        if known_letter and known_letter != word[i]:
+            return False
+    return True
+
+
+def check_not_contained(word: str, not_contained: list, contained: list, positions_to_check: list):
+    """Checks if the word contains all the letters with unknown positions."""
+    for character in not_contained:
+        if character not in contained:
+            for i in positions_to_check:
+                if character == word[i]:
+                    return False
+    return True
+
+
+def check_contained(word: str, contained: list, positions_to_check: list, tried: list):
+    is_contained = True
+    for character in contained:
+        is_contained = False
+        for i in positions_to_check:
+            if character == word[i]:
+                if character not in tried[i]:
+                    is_contained = True
+        if is_contained == False:
+            return False
+    return True
 
 
 def guess():
@@ -106,37 +139,10 @@ def guess():
         clear_screen()
         possibilitiesAUX = list()
         for word in possibilities:
-            # Every known letter must correspond for each word
-            for i, known_letter in enumerate(known):
-                if known_letter and known_letter != word[i]:
-                    break
-            else:
-                # No word should contain the letters from not_contained
-                for character in not_contained:
-                    if character not in contained:
-                        for i in positions_to_check:
-                            if character == word[i]:
-                                break
-                        else:
-                            continue
-                        break
-                else:
-                    # I have to refactor this, but I am scared
-                    ok_contained = True  # checks if all contained letters appear in word
-                    for character in contained:  # every letter that is contained must be checked
-                        ok_contained = False  # supposes a letter does not appear
-                        for i in positions_to_check:
-                            if character == word[i]:  # if the letter appears
-                                # and if it has not been tried in this position already
-                                if character not in tried[i]:
-                                    ok_contained = True  # the boolean variable is switched
-                                break  # it doesn't check for said letter anymore
-                        if ok_contained == False:  # it a letter didn't appear
-                            break  # it doesn't check for other letters
-
-                    if ok_contained:  # if yes, it is added for the next round of checking
+            if check_known(word, known):
+                if check_not_contained(word, not_contained, contained, positions_to_check):
+                    if check_contained(word, contained, positions_to_check, tried):
                         possibilitiesAUX.append(word)
-
         possibilities = possibilitiesAUX  # the list of possible words is updated
         print('------------------------------------')
         print('Possible words:')
