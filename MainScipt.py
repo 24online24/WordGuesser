@@ -1,9 +1,7 @@
-import os
-
-from numpy import true_divide
+from os import name, system
 
 
-def create_word_list(length):
+def create_word_list(length: int):
     # takes all English words (https://github.com/dwyl/english-words)
     with open('EnglishWords.txt') as wordsFile:
         # a set is made, so that no words appear twice
@@ -21,7 +19,7 @@ def create_word_list(length):
     return sorted(validWords)
 
 
-def get_int(message, maximum):
+def get_int(message: str, maximum: int):
     while True:
         print(message, end='')
         raw = input()
@@ -31,10 +29,9 @@ def get_int(message, maximum):
         raw = int(raw)
         if raw <= maximum or maximum == 0:
             return raw
-        
 
 
-def get_char(message, single):
+def get_char(message: str, single: bool):
     while True:
         print(message, end='')
         raw = input()
@@ -49,14 +46,14 @@ def get_char(message, single):
         print('Invalid input')
 
 
-def positional_check(set_to_check, positions_list, length):
+def positional_check(set_to_check: set, positions_list: list, length: int):
     for element in set_to_check:
         position = get_int(
             f'What position did you check "{element}" on? ', length)
         positions_list[position-1].append(element)
 
 
-def add_input_to_set(main_set: set, message: str=''):
+def add_input_to_set(main_set: set, message: str = ''):
     string = get_char(message, False)
     aux_set = set()
     for character in string:
@@ -74,10 +71,10 @@ def continue_check(msg: str):
 
 
 def clear_screen():
-    if os.name == 'nt':
-        _ = os.system('cls')
+    if name == 'nt':
+        _ = system('cls')
     else:
-        _ = os.system('clear')
+        _ = system('clear')
 
 
 def check_known(word: str, known: list):
