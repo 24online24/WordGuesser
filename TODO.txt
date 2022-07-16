@@ -1,7 +1,4 @@
 TO DO
-  - match both upper and lower case
-  - option to restart game
-  - check input validity
   
 Done
   - remove letter from contained if found position
@@ -11,4 +8,7 @@ Done
   - positional check prompts for every contained letter,
   not just the ones added on the last step
   - show colors in messages
-  - Display tried tuple nicer 
+  - display tried tuple nicer 
+  - check input validity
+  - match both upper and lower case
+  - option to restart game
