@@ -2,20 +2,18 @@ from os import name, system
 
 
 def create_word_list(length: int):
-    # takes all English words (https://github.com/dwyl/english-words)
+    """Imports all English words (https://github.com/dwyl/english-words)"""
     with open('EnglishWords.txt') as wordsFile:
-        # a set is made, so that no words appear twice
         allWords = set(wordsFile.read().split())
-        # filters all the words with a specific length
         validWords = {word for word in allWords if len(word) == length}
 
     if length == 5:  # The official Wordle game has some words that are not on the main list
-        # the Wordle word list is taken from the source code of the game, which is publicly available
+        # The Wordle word list is taken from the source code of the game, which is publicly available
         with open('WordleWords.txt') as wordsFile:
             wordleWords = set(wordsFile.read().split())  # makes another set
             validWords.update(wordleWords)  # we update the main set
 
-    # the final set is returned, ordered alphabetically
+    # The final set is returned, ordered alphabetically
     return sorted(validWords)
 
 
@@ -62,6 +60,7 @@ def add_input_to_set(main_set: set, message: str = ''):
 
 
 def continue_check(msg: str):
+    """Requires a positive or negative input and return it as a bool"""
     while True:
         check = input(f"{msg}? [Yes/ No] ")
         if check in ('Yes', 'Y', 'yes', 'y', '1'):
@@ -101,9 +100,8 @@ def check_contained(word: str, contained: list, positions_to_check: list, tried:
     for character in contained:
         is_contained = False
         for i in positions_to_check:
-            if character == word[i]:
-                if character not in tried[i]:
-                    is_contained = True
+            if character == word[i] and character not in tried[i]:
+                is_contained = True
         if is_contained == False:
             return False
     return True
@@ -120,7 +118,7 @@ def guess():
         positions_to_check.append(i)
     contained = set()
     not_contained = set()
-    # letters tried for every position, as lists in a tuple
+    # Letters tried for every position, as lists in a tuple
     tried = tuple(list() for _ in range(length))
     while True:
         print('Known letters (shown in green)')
