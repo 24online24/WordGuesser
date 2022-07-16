@@ -25,11 +25,13 @@ def get_int(message, maximum):
     while True:
         print(message, end='')
         raw = input()
-        if raw.isnumeric():
-            raw = int(raw)
-            if raw <= maximum or maximum == 0:
-                return raw
-        print('Invalid input')
+        if raw.isnumeric() == False:
+            print('Invalid input')
+            continue
+        raw = int(raw)
+        if raw <= maximum or maximum == 0:
+            return raw
+        
 
 
 def get_char(message, single):
@@ -40,10 +42,9 @@ def get_char(message, single):
             return raw
         if raw.isalpha():
             raw = raw.lower()
-            if single == True:
-                if len(raw) < 2:
-                    return raw
-            else:
+            if single == False:
+                return raw
+            if len(raw) < 2:
                 return raw
         print('Invalid input')
 
@@ -63,9 +64,9 @@ def add_input_to_set(main_set: set, message: str=''):
     main_set.update(aux_set)
 
 
-def continue_check():
+def continue_check(msg: str):
     while True:
-        check = input("Restart? [Yes/ No] ")
+        check = input(f"{msg}? [Yes/ No] ")
         if check in ('Yes', 'Y', 'yes', 'y', '1'):
             return True
         if check in ('No', 'N', 'no', 'n', '0'):
@@ -98,6 +99,7 @@ def check_not_contained(word: str, not_contained: list, contained: list, positio
 
 
 def check_contained(word: str, contained: list, positions_to_check: list, tried: list):
+    """Checks if the word contains any letter that should not be contained."""
     is_contained = True
     for character in contained:
         is_contained = False
@@ -126,12 +128,14 @@ def guess():
     while True:
         print('Known letters (shown in green)')
         for i in range(length):
+            if known[i]:
+                continue
+            known[i] = get_char(f'Letter {i+1}: ', True)
             if known[i] == '':
-                known[i] = get_char(f'Letter {i+1}: ', True)
-                if known[i]:
-                    positions_to_check.remove(i)
-                    if known[i] in contained:
-                        contained.remove(known[i])
+                continue
+            positions_to_check.remove(i)
+            if known[i] in contained:
+                contained.remove(known[i])
 
         add_input_to_set(contained, "Contained (shown in yellow): ")
         positional_check(contained, tried, length)
@@ -163,11 +167,12 @@ def guess():
             print(f' {i+1}: ', tried_list)
         print('Not contained:', ', '.join(char for char in not_contained))
         print('------------------------------------')
-        restart = continue_check()
-        if restart:
+        if continue_check('End round'):
             break
 
 
 if __name__ == '__main__':
     while True:
         guess()
+        if not continue_check('Start new round'):
+            break
