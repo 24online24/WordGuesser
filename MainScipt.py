@@ -7,8 +7,9 @@ def create_word_list(length: int):
         allWords = set(wordsFile.read().split())
         validWords = {word for word in allWords if len(word) == length}
 
-    if length == 5:  # The official Wordle game has some words that are not on the main list
-        # The Wordle word list is taken from the source code of the game, which is publicly available
+    # The official Wordle game has some words that are not on the main list.
+    # The Wordle word list is taken from the source code of the game, which is publicly available
+    if length == 5:  
         with open('WordleWords.txt') as wordsFile:
             wordleWords = set(wordsFile.read().split())  # makes another set
             validWords.update(wordleWords)  # we update the main set
