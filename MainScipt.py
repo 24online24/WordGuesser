@@ -1,27 +1,24 @@
-import os
-
-from numpy import true_divide
+from os import name, system
 
 
-def create_word_list(length):
-    # takes all English words (https://github.com/dwyl/english-words)
+def create_word_list(length: int):
+    """Imports all English words (https://github.com/dwyl/english-words)"""
     with open('EnglishWords.txt') as wordsFile:
-        # a set is made, so that no words appear twice
         allWords = set(wordsFile.read().split())
-        # filters all the words with a specific length
         validWords = {word for word in allWords if len(word) == length}
 
-    if length == 5:  # The official Wordle game has some words that are not on the main list
-        # the Wordle word list is taken from the source code of the game, which is publicly available
+    # The official Wordle game has some words that are not on the main list.
+    # The Wordle word list is taken from the source code of the game, which is publicly available
+    if length == 5:  
         with open('WordleWords.txt') as wordsFile:
             wordleWords = set(wordsFile.read().split())  # makes another set
             validWords.update(wordleWords)  # we update the main set
 
-    # the final set is returned, ordered alphabetically
+    # The final set is returned, ordered alphabetically
     return sorted(validWords)
 
 
-def get_int(message, maximum):
+def get_int(message: str, maximum: int):
     while True:
         print(message, end='')
         raw = input()
@@ -31,10 +28,9 @@ def get_int(message, maximum):
         raw = int(raw)
         if raw <= maximum or maximum == 0:
             return raw
-        
 
 
-def get_char(message, single):
+def get_char(message: str, single: bool):
     while True:
         print(message, end='')
         raw = input()
@@ -49,14 +45,14 @@ def get_char(message, single):
         print('Invalid input')
 
 
-def positional_check(set_to_check, positions_list, length):
+def positional_check(set_to_check: set, positions_list: list, length: int):
     for element in set_to_check:
         position = get_int(
             f'What position did you check "{element}" on? ', length)
         positions_list[position-1].append(element)
 
 
-def add_input_to_set(main_set: set, message: str=''):
+def add_input_to_set(main_set: set, message: str = ''):
     string = get_char(message, False)
     aux_set = set()
     for character in string:
@@ -65,6 +61,7 @@ def add_input_to_set(main_set: set, message: str=''):
 
 
 def continue_check(msg: str):
+    """Requires a positive or negative input and return it as a bool"""
     while True:
         check = input(f"{msg}? [Yes/ No] ")
         if check in ('Yes', 'Y', 'yes', 'y', '1'):
@@ -74,10 +71,10 @@ def continue_check(msg: str):
 
 
 def clear_screen():
-    if os.name == 'nt':
-        _ = os.system('cls')
+    if name == 'nt':
+        _ = system('cls')
     else:
-        _ = os.system('clear')
+        _ = system('clear')
 
 
 def check_known(word: str, known: list):
@@ -104,9 +101,8 @@ def check_contained(word: str, contained: list, positions_to_check: list, tried:
     for character in contained:
         is_contained = False
         for i in positions_to_check:
-            if character == word[i]:
-                if character not in tried[i]:
-                    is_contained = True
+            if character == word[i] and character not in tried[i]:
+                is_contained = True
         if is_contained == False:
             return False
     return True
@@ -123,7 +119,7 @@ def guess():
         positions_to_check.append(i)
     contained = set()
     not_contained = set()
-    # letters tried for every position, as lists in a tuple
+    # Letters tried for every position, as lists in a tuple
     tried = tuple(list() for _ in range(length))
     while True:
         print('Known letters (shown in green)')
